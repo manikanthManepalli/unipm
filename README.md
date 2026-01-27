@@ -8,7 +8,7 @@
 
 **unipm** is a cross-platform command-line tool that simplifies software installation with natural commands. It automatically detects your OS and package manager, resolves package names, and executes the correct installation command — all while maintaining transparency and safety.
 
-## ✨ Features
+## Features
 
 - **Unified Syntax**: One command works across all platforms
 - **Auto-Detection**: Automatically detects OS, distribution, and package manager
@@ -17,7 +17,7 @@
 - **Cross-Platform**: Linux, macOS, and Windows support
 - **Extensible**: JSON-based package knowledge base
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -70,7 +70,7 @@ unipm install mongodb --yes
 unipm install docker --pm=brew
 ```
 
-## 📦 Supported Package Managers
+## Supported Package Managers
 
 - **APT** (Debian, Ubuntu)
 - **Pacman** (Arch Linux)
@@ -79,14 +79,14 @@ unipm install docker --pm=brew
 - **Winget** (Windows 10/11)
 - **Chocolatey** (Windows)
 
-## 🎯 Use Cases
+## Use Cases
 
 - **Developer Environment Setup**: Quickly install dev tools across different machines
 - **Linux Onboarding**: Help new users without package manager knowledge
 - **CI/CD Automation**: Standardize installation scripts across platforms
 - **Educational Labs**: Simplify software installation for students
 
-## 📖 Examples
+## Examples
 
 ### Install Docker on any platform
 ```bash
@@ -110,7 +110,7 @@ unipm install postgres --dry-run
 # Output: Would execute: sudo apt install -y postgresql
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 unipm uses a JSON package database located at:
 - **Linux**: `/usr/local/share/unipm/packages.json`
@@ -135,7 +135,7 @@ You can extend the database with custom mappings at:
 }
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 unipm follows a modular three-layer architecture:
 
@@ -145,14 +145,14 @@ unipm follows a modular three-layer architecture:
 
 See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed design documentation.
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd build
 ctest
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues.
 
@@ -188,15 +188,15 @@ Edit `data/packages.json`:
 3. Add to `AdapterFactory::create()`
 4. Update `PackageManager` enum in `types.h`
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Inspired by the universal package manager concept
 - Uses [nlohmann/json](https://github.com/nlohmann/json) for JSON parsing
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 unipm is a convenience wrapper around native package managers. It does not replace them and requires them to be installed on your system. Always review commands before execution using `--dry-run`.
