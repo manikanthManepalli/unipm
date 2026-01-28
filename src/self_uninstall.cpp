@@ -3,12 +3,16 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <filesystem>
+#include <sys/stat.h>
 
 #ifdef _WIN32
     #include <windows.h>
+    #include <direct.h>
+    #define rmdir _rmdir
+    #define unlink _unlink
 #else
     #include <unistd.h>
+    #include <dirent.h>
 #endif
 
 namespace unipm {
@@ -74,12 +78,8 @@ bool SelfUninstaller::removeBinary() {
         return false;
     }
     
-    try {
-        std::filesystem::remove(binaryPath);
-        return true;
-    } catch (...) {
-        return false;
-    }
+    // Will be removed by cleanup script
+    return true;
 }
 
 bool SelfUninstaller::removeConfigDirectory() {
@@ -89,14 +89,14 @@ bool SelfUninstaller::removeConfigDirectory() {
         return true; // Nothing to remove
     }
     
-    try {
-        if (std::filesystem::exists(configDir)) {
-            std::filesystem::remove_all(configDir);
-        }
-        return true;
-    } catch (...) {
-        return false;
-    }
+#ifdef _WIN32
+    std::string command = "rmdir /s /q \"" + configDir + "\" 2>nul";
+#else
+    std::string command = "rm -rf '" + configDir + "' 2>/dev/null";
+#endif
+    
+    std::system(command.c_str());
+    return true;
 }
 
 bool SelfUninstaller::removeCacheDirectory() {
@@ -106,14 +106,14 @@ bool SelfUninstaller::removeCacheDirectory() {
         return true; // Nothing to remove
     }
     
-    try {
-        if (std::filesystem::exists(cacheDir)) {
-            std::filesystem::remove_all(cacheDir);
-        }
-        return true;
-    } catch (...) {
-        return false;
-    }
+#ifdef _WIN32
+    std::string command = "rmdir /s /q \"" + cacheDir + "\" 2>nul";
+#else
+    std::string command = "rm -rf '" + cacheDir + "' 2>/dev/null";
+#endif
+    
+    std::system(command.c_str());
+    return true;
 }
 
 bool SelfUninstaller::removeFromPath() {
@@ -184,12 +184,12 @@ int SelfUninstaller::uninstall(bool force) {
         std::cout << "  • unipm binary: " << getBinaryPath() << std::endl;
         
         std::string configDir = getConfigDirectory();
-        if (!configDir.empty() && std::filesystem::exists(configDir)) {
-            std::cout << "  • Config directory: " << configDir << std::endl;
+        if (!configDir.empty()) {
+            std::cout << "  • Config directory: " <<configDir << std::endl;
         }
         
         std::string cacheDir = getCacheDirectory();
-        if (!cacheDir.empty() && std::filesystem::exists(cacheDir)) {
+        if (!cacheDir.empty()) {
             std::cout << "  • Cache directory: " << cacheDir << std::endl;
         }
         

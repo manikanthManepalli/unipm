@@ -267,15 +267,24 @@ int main(int argc, char* argv[]) {
     }
     
     // Execute command
-    if (cmd.verbose) {
+    if (!cmd.autoYes) {
         UI::printInfo("Executing: " + command);
+    } else {
+        UI::printInfo("Installing with auto-confirmation...");
+        std::cout << "  Command: " << command << std::endl;
     }
+    std::cout << std::endl;  // Add spacing
     
     Executor executor;
     ExecutionResult result = executor.execute(command, requiresRoot);
     
-    // Display result
-    UI::printResult(result);
+    // Display result - just show success/failure, output already streamed
+    std::cout << std::endl;  // Add spacing
+    if (result.success) {
+        UI::printSuccess("Installation completed successfully");
+    } else {
+        UI::printError("Installation failed with exit code " + std::to_string(result.exitCode));
+    }
     
     return result.success ? 0 : result.exitCode;
 }

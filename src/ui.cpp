@@ -51,9 +51,13 @@ void UI::printPreview(const std::string& command, bool requiresRoot) {
 bool UI::confirm(const std::string& message, bool defaultYes) {
     std::string prompt = message + (defaultYes ? " [Y/n]: " : " [y/N]: ");
     std::cout << colorize(prompt, CYAN);
+    std::cout.flush();  // Ensure prompt is displayed before reading input
     
     std::string response;
-    std::getline(std::cin, response);
+    if (!std::getline(std::cin, response)) {
+        // If input fails, return default
+        return defaultYes;
+    }
     
     if (response.empty()) {
         return defaultYes;
@@ -96,8 +100,12 @@ void UI::printHelp() {
     std::cout << "  search, find      Search for packages" << std::endl;
     std::cout << "  list, ls          List installed packages" << std::endl;
     std::cout << "  info, show        Show package information" << std::endl;
+    std::cout << "  doctor            Run system diagnostics" << std::endl;
     std::cout << "  help              Show this help message" << std::endl;
     std::cout << "  version           Show version information" << std::endl;
+    std::cout << std::endl;
+    std::cout << colorize("Self-Management:", BOLD) << std::endl;
+    std::cout << "  uninstall --self  Uninstall unipm from your system" << std::endl;
     std::cout << std::endl;
     std::cout << colorize("Options:", BOLD) << std::endl;
     std::cout << "  --dry-run, -n     Preview command without executing" << std::endl;

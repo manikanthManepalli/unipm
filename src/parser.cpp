@@ -56,6 +56,8 @@ bool Parser::validate(const Command& cmd, std::string& error) {
         case CommandType::LIST:
         case CommandType::HELP:
         case CommandType::VERSION:
+        case CommandType::DOCTOR:
+        case CommandType::SELF_UNINSTALL:
             // These don't require packages
             break;
     }

@@ -122,6 +122,7 @@ ExecutionResult Executor::executeWindows(const std::string& command) {
     si.cb = sizeof(si);
     si.hStdError = hStderrWrite;
     si.hStdOutput = hStdoutWrite;
+    si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     si.dwFlags |= STARTF_USESTDHANDLES;
 
     ZeroMemory(&pi, sizeof(pi));
@@ -133,26 +134,53 @@ ExecutionResult Executor::executeWindows(const std::string& command) {
         CloseHandle(hStdoutWrite);
         CloseHandle(hStderrWrite);
 
-        WaitForSingleObject(pi.hProcess, INFINITE);
-
-        DWORD exitCode;
-        GetExitCodeProcess(pi.hProcess, &exitCode);
-        result.exitCode = exitCode;
-        result.success = (exitCode == 0);
-
-        // Read stdout
+        // Read output in real-time while process is running
         char buffer[4096];
         DWORD bytesRead;
-        while (ReadFile(hStdoutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) &&
-               bytesRead > 0) {
+        DWORD bytesAvail;
+        
+        while (true) {
+            // Check if process is still running
+            DWORD exitCode;
+            if (GetExitCodeProcess(pi.hProcess, &exitCode) && exitCode != STILL_ACTIVE) {
+                result.exitCode = exitCode;
+                result.success = (exitCode == 0);
+                break;
+            }
+
+            // Read available stdout
+            PeekNamedPipe(hStdoutRead, NULL, 0, NULL, &bytesAvail, NULL);
+            if (bytesAvail > 0) {
+                if (ReadFile(hStdoutRead, buffer, std::min((DWORD)(sizeof(buffer) - 1), bytesAvail), &bytesRead, NULL) && bytesRead > 0) {
+                    buffer[bytesRead] = '\0';
+                    std::cout << buffer << std::flush;
+                    result.stdoutOutput += buffer;
+                }
+            }
+
+            // Read available stderr
+            PeekNamedPipe(hStderrRead, NULL, 0, NULL, &bytesAvail, NULL);
+            if (bytesAvail > 0) {
+                if (ReadFile(hStderrRead, buffer, std::min((DWORD)(sizeof(buffer) - 1), bytesAvail), &bytesRead, NULL) && bytesRead > 0) {
+                    buffer[bytesRead] = '\0';
+                    std::cerr << buffer << std::flush;
+                    result.stderrOutput += buffer;
+                }
+            }
+
+            Sleep(100);  // Small delay to avoid busy-waiting
+        }
+
+        // Read any remaining output
+        while (ReadFile(hStdoutRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0) {
             buffer[bytesRead] = '\0';
+            std::cout << buffer << std::flush;
             result.stdoutOutput += buffer;
         }
 
-        // Read stderr
-        while (ReadFile(hStderrRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) &&
-               bytesRead > 0) {
+        while (ReadFile(hStderrRead, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0) {
             buffer[bytesRead] = '\0';
+            std::cerr << buffer << std::flush;
             result.stderrOutput += buffer;
         }
 
